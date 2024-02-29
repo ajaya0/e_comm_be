@@ -9,7 +9,7 @@ exports.signup= async(req,res) => {
     //logic to create the user
     //1. Read the request body
     const request_body=req.body
-
+ 
     //2. Insert the data in the suer collection in mongoDB
     //get the data from body
     const userObj={
