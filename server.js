@@ -7,6 +7,7 @@ const bcrypt=require("bcryptjs")
 const app = exrpess();
 
 
+app.use(exrpess.json())
 /**
  * Create an admin user at the starting of the application
  * if not already present
@@ -52,6 +53,11 @@ async function init(){
     }   
 }
 
+
+
+// call the routes API inside the server
+
+require("./routes/auth.routes.js")(app)
 
 app.listen(server_config.PORT,()=>{
     console.log("server started on : ",server_config.PORT);

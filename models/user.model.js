@@ -28,8 +28,8 @@ const userSchema = new mogoose.Schema({
     userType:{
         type:String,
         require:true,
-        default:"CUSTOMER",
-        enum:["CUSTOMER","ADMIN"]
+        default:"COSTUMER",
+        enum:["COSTUMER","ADMIN"]
     }
 },{timeseries:true,versionKey:false})
 
