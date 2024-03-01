@@ -1,4 +1,6 @@
 const user_model=require("../models/user.model")
+const jwt=require('jsonwebtoken')
+const auth_config=require('../configs/auth.config')
 /**
  * Create a mw will check it the reqest body is proper or not
  */
@@ -43,6 +45,69 @@ const verifySignUpBody= async(req,res,next)=>{
     }
 }
 
+const vrifySigninBody=(req,res,next)=>{
+    if(!req.body.userId){
+        return res.status(400).send({
+            msg:"userId is not provided"
+        })
+    }
+    if(!req.body.password){
+        return res.status(400).send({
+            msg:"password is not provided"
+        })
+    }
+    
+    next()
+}
+
+// token virify for
+
+const verifyToken= (req,res,next)=>{
+    //check is the token is present in the header
+    const token=req.headers['x-access-token']
+
+    if(!token){
+        res.status(403).send({
+            msg:"No Token found : UnAuthorized !"
+        })
+    }
+    //if its valid token
+
+    jwt.verify(token,auth_config.secret, async (err,decoded)=>{
+        if(err){
+            return res.status(401).send({
+                msg:"UnAuthorized !"
+            })
+        }
+        const user= await user_model.findOne({userId:decoded.id})
+
+        if(!user){
+            return res.status(401).send({
+                msg:"UnAuthorized ,this user for this token does not exist"
+            })
+        }
+        //set the user info in the req.body
+        req.user =user
+        //if all of them is success the move to the next step
+        next()
+    })  
+}
+
+const isAdminCheck=(req,res,next)=>{
+    const user=req.user
+
+    if(user && user.userType == "ADMIN"){
+        next()
+    }else{
+        return res.status(403).send({
+            msg:"Only ADMIN user allowed to acces this ..."
+        })
+    }
+}
+
 module.exports ={
-    verifySignUpBody : verifySignUpBody
+    verifySignUpBody : verifySignUpBody,
+    vrifySigninBody:vrifySigninBody,
+    verifyToken:verifyToken,
+    isAdminCheck:isAdminCheck
 }

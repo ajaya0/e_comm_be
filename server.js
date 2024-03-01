@@ -58,6 +58,7 @@ async function init(){
 // call the routes API inside the server
 
 require("./routes/auth.routes.js")(app)
+require("./routes/category.routes.js")(app)
 
 app.listen(server_config.PORT,()=>{
     console.log("server started on : ",server_config.PORT);
