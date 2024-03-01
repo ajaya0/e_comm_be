@@ -6,7 +6,7 @@ const user_model= require("./models/user.model.js")
 const bcrypt=require("bcryptjs")
 const app = exrpess();
 
-
+// convert json to javascript object
 app.use(exrpess.json())
 /**
  * Create an admin user at the starting of the application
